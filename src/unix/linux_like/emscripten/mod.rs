@@ -788,6 +788,8 @@ pub const O_TRUNC: c_int = 512;
 pub const O_NOATIME: c_int = 0o1000000;
 pub const O_CLOEXEC: c_int = 0x80000;
 
+pub const EPOLL_CLOEXEC: c_int = 0x80000;
+
 // Defined as wasi value.
 pub const EPERM: c_int = 63;
 pub const ENOENT: c_int = 44;
@@ -1457,6 +1459,23 @@ extern "C" {
         buf: *mut c_char,
         buflen: size_t,
         result: *mut *mut crate::group,
+    ) -> c_int;
+
+    pub fn epoll_create(size: c_int) -> c_int;
+    pub fn epoll_create1(flags: c_int) -> c_int;
+    pub fn epoll_wait(
+        epfd: c_int,
+        events: *mut crate::epoll_event,
+        maxevents: c_int,
+        timeout: c_int,
+    ) -> c_int;
+    pub fn epoll_ctl(epfd: c_int, op: c_int, fd: c_int, event: *mut crate::epoll_event) -> c_int;
+    pub fn epoll_pwait(
+        epfd: c_int,
+        events: *mut crate::epoll_event,
+        maxevents: c_int,
+        timeout: c_int,
+        sigmask: *const crate::sigset_t,
     ) -> c_int;
 }
 
