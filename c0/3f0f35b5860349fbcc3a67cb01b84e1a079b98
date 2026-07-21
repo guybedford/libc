@@ -1,0 +1,21 @@
+src/new/emscripten/pthread.rs
+  s_f02b9a82b804fb::t_8fb049119e9056 11,15
+src/unix/linux_like/emscripten/mod.rs
+  s_f02b9a82b804fb::t_d1ba4e099460ea 1461-1468
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "c03f0f35b5860349fbcc3a67cb01b84e1a079b98",
+  "prompts": {},
+  "sessions": {
+    "s_f02b9a82b804fb": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_079db2a07ffegaClYMCzwJLSv8",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Guy Bedford <gbedford@cloudflare.com>"
+    }
+  }
+}
