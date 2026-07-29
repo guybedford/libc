@@ -303,6 +303,14 @@ cfg_if! {
         pub use crate::xous::*;
 
         prelude!();
+    } else if #[cfg(all(target_arch = "wasm32", target_os = "unknown"))] {
+        mod primitives;
+        pub use crate::primitives::*;
+
+        mod wasm32_unknown;
+        pub use crate::wasm32_unknown::*;
+
+        prelude!();
     } else {
         // non-supported targets: empty...
     }
