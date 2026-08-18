@@ -3414,6 +3414,9 @@ fn test_emscripten(target: &str) {
         "stdio.h",
         "stdlib.h",
         "string.h",
+        // `sys/epoll.h` was restored in Emscripten 6.0.2
+        // https://github.com/emscripten-core/emscripten/pull/27206
+        (emscripten >= (6, 0, 2), "sys/epoll.h"),
         "sys/file.h",
         "sys/ioctl.h",
         "sys/ipc.h",
@@ -3489,11 +3492,11 @@ fn test_emscripten(target: &str) {
         }
     });
 
-    cfg.skip_union(|union_| {
+    cfg.skip_union(move |union_| {
         match union_.ident() {
-            // No epoll support
-            // https://github.com/emscripten-core/emscripten/issues/5033
-            ty if ty.starts_with("epoll") => true,
+            // `sys/epoll.h` was restored in Emscripten 6.0.2
+            // https://github.com/emscripten-core/emscripten/pull/27206
+            ty if ty.starts_with("epoll") => emscripten < (6, 0, 2),
 
             _ => false,
         }
@@ -3520,9 +3523,9 @@ fn test_emscripten(target: &str) {
             // Extern types
             "DIR" | "FILE" | "fpos_t" | "fpos64_t" | "timezone" => true,
 
-            // No epoll support
-            // https://github.com/emscripten-core/emscripten/issues/5033
-            ty if ty.starts_with("epoll") => true,
+            // `sys/epoll.h` was restored in Emscripten 6.0.2
+            // https://github.com/emscripten-core/emscripten/pull/27206
+            ty if ty.starts_with("epoll") => emscripten < (6, 0, 2),
 
             ty if ty.starts_with("signalfd") => true,
             _ => false,
@@ -3536,7 +3539,15 @@ fn test_emscripten(target: &str) {
             "execv" | "execve" | "execvp" | "execvpe" | "fexecve" | "wait4" => true,
 
             // Emscripten's `pthread_kill` used to only be linkable when building with `-pthread`
-            "pthread_kill" if emscripten < (6, 0) => true,
+            "pthread_kill" if emscripten < (6, 0, 0) => true,
+
+            // epoll support was added in Emscripten 6.0.8
+            // https://github.com/emscripten-core/emscripten/pull/27207
+            "epoll_create" | "epoll_create1" | "epoll_ctl" | "epoll_wait" | "epoll_pwait"
+                if emscripten < (6, 0, 8) =>
+            {
+                true
+            }
 
             _ => false,
         }
@@ -3551,9 +3562,9 @@ fn test_emscripten(target: &str) {
             // FIXME(emscripten): emscripten uses different constants to constructs these
             n if n.contains("__SIZEOF_PTHREAD") => true,
 
-            // No epoll support
-            // https://github.com/emscripten-core/emscripten/issues/5033
-            n if n.starts_with("EPOLL") => true,
+            // `sys/epoll.h` was restored in Emscripten 6.0.2
+            // https://github.com/emscripten-core/emscripten/pull/27206
+            n if n.starts_with("EPOLL") => emscripten < (6, 0, 2),
 
             // No ptrace.h
             // https://github.com/emscripten-core/emscripten/pull/17704
@@ -6564,7 +6575,7 @@ struct Versions {
     openbsd: Option<(u32, u32)>,
     netbsd: Option<(u32, u32)>,
     macos: Option<(u32, u32)>,
-    emscripten: Option<(u32, u32)>,
+    emscripten: Option<(u32, u32, u32)>,
 }
 
 impl Versions {
@@ -6598,7 +6609,7 @@ impl Versions {
             #endif
 
             #ifdef __EMSCRIPTEN__
-            /* Provides __EMSCRIPTEN_MAJOR__, __EMSCRIPTEN_MINOR__ */
+            /* Provides __EMSCRIPTEN_major__, __EMSCRIPTEN_minor__, __EMSCRIPTEN_tiny__ */
             #include "emscripten/version.h"
             #endif
         "#;
@@ -6675,11 +6686,22 @@ impl Versions {
                     let minor: u32 = caps[2].parse().unwrap();
                     ret.openbsd = Some((major, minor));
                 }
-                "__EMSCRIPTEN_major__" => {
-                    ret.emscripten.get_or_insert_default().0 = value.parse().unwrap()
+                // Old versions define the lowercase names as integers, new versions define
+                // the uppercase names as integers and the lowercase names as aliases of them.
+                "__EMSCRIPTEN_major__" | "__EMSCRIPTEN_MAJOR__" => {
+                    if let Ok(v) = value.parse() {
+                        ret.emscripten.get_or_insert_default().0 = v;
+                    }
                 }
-                "__EMSCRIPTEN_minor__" => {
-                    ret.emscripten.get_or_insert_default().1 = value.parse().unwrap()
+                "__EMSCRIPTEN_minor__" | "__EMSCRIPTEN_MINOR__" => {
+                    if let Ok(v) = value.parse() {
+                        ret.emscripten.get_or_insert_default().1 = v;
+                    }
+                }
+                "__EMSCRIPTEN_tiny__" | "__EMSCRIPTEN_TINY__" => {
+                    if let Ok(v) = value.parse() {
+                        ret.emscripten.get_or_insert_default().2 = v;
+                    }
                 }
                 _ => (),
             }
