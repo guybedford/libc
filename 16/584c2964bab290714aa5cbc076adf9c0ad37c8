@@ -1,0 +1,22 @@
+libc-test/build/main.rs
+  s_428de3de98ffc4::t_fc082722e735c9 3205-3207,3281,3287-3289,3313-3315,3329-3337,3348-3350
+  s_428de3de98ffc4::t_bfa7f947fcd87c 6288,6340,6427-6437,6439-6442
+src/unix/linux_like/emscripten/mod.rs
+  s_428de3de98ffc4::t_888bc818afc925 810-811,1482-1497
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "16584c2964bab290714aa5cbc076adf9c0ad37c8",
+  "prompts": {},
+  "sessions": {
+    "s_428de3de98ffc4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe8f246c9ffePKzS35mkEx95DF",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Guy Bedford <guybedford@gmail.com>"
+    }
+  }
+}
