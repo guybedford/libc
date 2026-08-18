@@ -1,0 +1,19 @@
+libc-test/build/main.rs
+  s_428de3de98ffc4::t_bfa7f947fcd87c 6277,6329,6416-6421,6423-6431
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "1b2acf1a2c9ffe4797dc5bccb1cbbcec69f0e932",
+  "prompts": {},
+  "sessions": {
+    "s_428de3de98ffc4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe8f246c9ffePKzS35mkEx95DF",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Guy Bedford <guybedford@gmail.com>"
+    }
+  }
+}
