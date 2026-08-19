@@ -1,0 +1,32 @@
+src/unix/linux_like/emscripten/mod.rs
+  s_428de3de98ffc4::t_888bc818afc925 810-811,1482-1497
+libc-test/build/main.rs
+  s_428de3de98ffc4::t_bfa7f947fcd87c 6288,6340,6427-6438,6440-6443
+  s_428de3de98ffc4::t_fc082722e735c9 3205-3207,3281,3287-3289,3313-3315,3329-3337,3348-3350
+libc-test/semver/emscripten.txt
+  s_108ea8f625a2be::t_3bd7363cf19624 2-20,22-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "9a6964cc713dd50177915e711228c0cfaa027c79",
+  "prompts": {},
+  "sessions": {
+    "s_108ea8f625a2be": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe52b6e95ffexSyFy1XgluLKiG",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Guy Bedford <guybedford@gmail.com>"
+    },
+    "s_428de3de98ffc4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe8f246c9ffePKzS35mkEx95DF",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Guy Bedford <guybedford@gmail.com>"
+    }
+  }
+}
